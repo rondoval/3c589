@@ -28,7 +28,7 @@ MA 02111-1307, USA.
 
 #include <proto/exec.h>
 #include <proto/alib.h>
-#include <proto/cardres.h>
+#include <inline/cardres.h>
 #include <proto/utility.h>
 #include <proto/pccard.h>
 #include <proto/timer.h>
@@ -266,11 +266,11 @@ struct DevUnit *CreateUnit(ULONG unit_num,struct DevBase *base)
 
       unit->rx_int.is_Node.ln_Name=(TEXT *)device_name;
       unit->rx_int.is_Node.ln_Pri=16;
-      unit->rx_int.is_Code=RxInt;
+      unit->rx_int.is_Code=(APTR)RxInt;
       unit->rx_int.is_Data=unit;
 
       unit->tx_int.is_Node.ln_Name=(TEXT *)device_name;
-      unit->tx_int.is_Code=TxInt;
+      unit->tx_int.is_Code=(APTR)TxInt;
       unit->tx_int.is_Data=unit;
 
       unit->request_ports[WRITE_QUEUE]->mp_Flags=PA_SOFTINT;
@@ -303,9 +303,9 @@ struct DevUnit *CreateUnit(ULONG unit_num,struct DevBase *base)
    {
       /* Try to gain access to card */
 
-      card_removed_int->is_Code=CardRemovedInt;
+      card_removed_int->is_Code=(APTR)CardRemovedInt;
       card_removed_int->is_Data=unit;
-      card_inserted_int->is_Code=CardInsertedInt;
+      card_inserted_int->is_Code=(APTR)CardInsertedInt;
       card_inserted_int->is_Data=unit;
       card_status_int->is_Code=(APTR)CardStatusInt;
       card_status_int->is_Data=unit;

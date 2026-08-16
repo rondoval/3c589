@@ -61,8 +61,8 @@ static VOID DevAbortIO(struct IOSana2Req *request REG("a1"),
    struct DevBase *base REG(BASE_REG));
 VOID DeleteDevice(struct DevBase *base);
 
-extern const APTR vectors[];
-extern const APTR init_table[];
+static const APTR vectors[];
+static const APTR init_table[];
 
 
 /* Return an error immediately if someone tries to run the device */
@@ -271,7 +271,8 @@ static BYTE DevOpen(ULONG unit_num REG("d0"),
 
    if(error==0)
    {
-      request->ios2_Req.io_Unit=(APTR)unit=GetUnit(unit_num,base);
+      unit=GetUnit(unit_num,base);
+      request->ios2_Req.io_Unit=(APTR)unit;
       if(unit==NULL)
          error=IOERR_OPENFAIL;
    }
