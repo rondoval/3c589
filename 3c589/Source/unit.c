@@ -1375,6 +1375,11 @@ static UBYTE CardStatusInt(UBYTE mask REG("d0"),
 
    if(((unit->flags&UNITF_HAVEADAPTER)!=0)&&((mask&CARD_STATUSF_IRQ)!=0))
    {
+      /* Work around gayle interrupt bug */
+
+      *((volatile UBYTE *)0xda9000)=(mask^0x2c)|0xc0;
+      mask=0;
+
       io_base=unit->io_base;
       ints=LEWordIn(io_base+EL3REG_STATUS);
 
@@ -1402,11 +1407,6 @@ static UBYTE CardStatusInt(UBYTE mask REG("d0"),
          LEWordOut(io_base+EL3REG_COMMAND,
             EL3CMD_ACKINT|EL3INTF_ANY);
       }
-
-      /* Work around gayle interrupt bug */
-
-      *((volatile UBYTE *)0xda9000)=(mask^0x2c)|0xc0;
-      mask=0;
    }
 
    return mask;
@@ -1940,7 +1940,7 @@ VOID TxError(struct DevUnit *unit,struct DevBase *base)
 
    /* Restart transmitter if necessary */
 
-   if((flags&EL3REG_TXSTATUSF_JABBER)!=0)
+   if((flags&(EL3REG_TXSTATUSF_JABBER|EL3REG_TXSTATUSF_UNDERRUN))!=0)
    {
       Disable();
       LEWordOut(io_base+EL3REG_COMMAND,EL3CMD_TXRESET);
@@ -1949,7 +1949,8 @@ VOID TxError(struct DevUnit *unit,struct DevBase *base)
       Enable();
    }
 
-   if((flags&(EL3REG_TXSTATUSF_JABBER|EL3REG_TXSTATUSF_OVERFLOW))!=0)
+   if((flags&(EL3REG_TXSTATUSF_JABBER|EL3REG_TXSTATUSF_UNDERRUN
+      |EL3REG_TXSTATUSF_MAXCOLLISIONS|EL3REG_TXSTATUSF_OVERFLOW))!=0)
       LEWordOut(io_base+EL3REG_COMMAND,EL3CMD_TXENABLE);
 
    /* Report the error(s) */
