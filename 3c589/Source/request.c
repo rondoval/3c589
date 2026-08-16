@@ -696,7 +696,7 @@ static BOOL CmdTrackType(struct IOSana2Req *request,
 {
    struct DevUnit *unit;
    struct Opener *opener;
-   ULONG packet_type,wire_error;
+   ULONG packet_type,wire_error=0;
    struct TypeTracker *tracker;
    struct TypeStats *initial_stats;
    BYTE error=0;
@@ -1179,7 +1179,7 @@ static BOOL CmdOnline(struct IOSana2Req *request,struct DevBase *base)
 {
    struct DevUnit *unit;
    BYTE error=0;
-   ULONG wire_error;
+   ULONG wire_error=0;
    UWORD i;
 
    /* Check request is valid */

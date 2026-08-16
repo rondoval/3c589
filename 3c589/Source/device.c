@@ -575,10 +575,6 @@ static VOID DevBeginIO(struct IOSana2Req *request REG("a1"),
 static VOID DevAbortIO(struct IOSana2Req *request REG("a1"),
    struct DevBase *base REG(BASE_REG))
 {
-   struct DevUnit *unit;
-
-   unit=(APTR)request->ios2_Req.io_Unit;
-
    Disable();
    if((request->ios2_Req.io_Message.mn_Node.ln_Type==NT_MESSAGE)
       &&((request->ios2_Req.io_Flags&IOF_QUICK)==0))

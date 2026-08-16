@@ -494,7 +494,7 @@ static BOOL InitialiseCard(struct DevUnit *unit,struct DevBase *base)
    UBYTE config_value,i,window_count,*tuple_buffer;
    const struct TagItem *tuple_tags=NULL;
    ULONG *io_bases,*io_lengths,io_base=0,config_base_offset;
-   UWORD maker,product;
+   UWORD maker=0,product=0;
 
    /* Wake up card */
 
@@ -561,8 +561,8 @@ static BOOL InitialiseCard(struct DevUnit *unit,struct DevBase *base)
    if(success)
    {
       config_value=GetTagData(PCCARD_ModeNo,0,tuple_tags);
-      if(product = 0x562 && config_value == 9)
-         config_value = 7;
+      if((product==0x562)&&(config_value==9))
+         config_value=7;
 
       io_bases=(APTR)GetTagData(PCCARD_IOWinBases,NULL,tuple_tags);
       if(io_bases==NULL)
@@ -1790,6 +1790,7 @@ static VOID TxInt(struct DevUnit *unit REG("a1"))
    while(proceed&&(!IsMsgPortEmpty(port)))
    {
       error=0;
+      wire_error=0;
 
       request=(APTR)port->mp_MsgList.lh_Head;
       data_size=packet_size=request->ios2_DataLength;
