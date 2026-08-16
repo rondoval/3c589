@@ -38,7 +38,7 @@ MA 02111-1307, USA.
 #include "request_protos.h"
 
 #define VERSION 1
-#define REVISION 5
+#define REVISION 6
 #define UNIT_COUNT 1
 #define UTILITY_VERSION 36
 #define PCCARD_VERSION 1
@@ -75,7 +75,7 @@ LONG Main()
 #define DEVICE_NAME "3c589.device"
 
 const TEXT device_name[]=DEVICE_NAME;
-static const TEXT version_string[]=DEVICE_NAME " 1.5 (3.2.2010)\n";
+static const TEXT version_string[]=DEVICE_NAME " 1.6 (16.8.2026)\n";
 static const TEXT card_name[]=CARDRESNAME;
 static const TEXT utility_name[]=UTILITYNAME;
 static const TEXT pccard_name[]=PCCARDNAME;
