@@ -1,0 +1,27 @@
+
+DESIGN NOTES:
+
+ - Type tracking has been implemented in an unusual way in order to make it
+   more suitable for multiple users. Each client that tracks a particular
+   packet type is given the impression that it is the only one doing so.
+   When a client begins tracking a packet type that is already being
+   tracked, the current packet statistics are recorded internally. These
+   initial statistics are then subtracted from the figures returned from
+   every S2_GETTYPESTATS call the client makes.
+ - The cards' 8-bit statistics registers appear to be unreadable using the
+   A1200's PCMCIA slot.
+ - S2_CopyToBuff32 functions are not used because the non-raw portion of
+   received packets is not 32-bit aligned.
+
+
+TCP/IP STACK BUGS TO CONSIDER:
+
+ - Miami(DX) doesn't like requests being aborted upon S2_OFFLINE.
+ - MiamiDX's CopyFromBuff16/32 functions appear to be broken.
+ - Genesis calls S2_ONLINE before S2_CONFIGINTERFACE?
+ - When a device goes back online without Genesis's intervention, Genesis
+   displays the message "eth0 is online again" or similar, but keeps the
+   interface's indicator red and doesn't disable the "Online" button or
+   enable the "Offline" button.
+
+

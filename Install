@@ -1,0 +1,43 @@
+; Installer for 3c589.device.
+; Copyright © 2003 Neil Cafferkey.
+; $VER: "Install 3c589.device" 1.2 (25.2.2004)
+
+
+; Set constants
+
+(set #kick-too-low-msg "Kickstart 2.05 or greater is required.")
+
+(set #dev-name "3c589.device")
+(set #devs-source "Devs/networks")
+(set @default-dest "DEVS:networks")
+(set #pccard-name "pccard.library")
+(set #libs-source "Libs")
+(set #libs-dest "LIBS:")
+
+
+; Check Kickstart version
+
+(if (< (/ (getversion) 65536) 37)
+   (abort #kick-too-low-msg)
+)
+
+
+; Install pccard.library
+
+(copylib
+   (source (tackon #libs-source #pccard-name))
+   (dest #libs-dest)
+;   (newname #dev-name)
+   (help @copylib-help)
+)
+
+
+; Install device
+
+(copylib
+   (source (tackon #devs-source #dev-name))
+   (dest @default-dest)
+   (help @copylib-help)
+)
+
+
